@@ -1,5 +1,3 @@
-
-
 class Pmf(object):
     '''
         Probability distribution function
@@ -40,12 +38,16 @@ class BayesFrame(Pmf):
         Bayes frame work, intialize with prior probability - hypothesis priors
         Implement likelihood function
         Use update method to update posteria
+
+        Subclassing warning:
+        `likelihood` function should return probability of data under hypothesis
     '''
 
     def __init__(self, hypos):
         '''
             Parameters:
                 hypo: iterable, each element will get an equal prior probability
+                    accept iterables: (str, list, set, dict)
         '''
         super(BayesFrame, self).__init__()
 
@@ -60,6 +62,24 @@ class BayesFrame(Pmf):
             self.normalize()
         else:
             raise ValueError('Hypothesis should be in on of (dict, list, str, set)')
+
+    @classmethod
+    def from_list_eq_prob(cls,hypos):
+        if not isinstance(hypos, list):
+            raise ValueError('Input should be a list')
+        return cls(hypos)
+
+    @classmethod
+    def from_str_eq_prob(cls,hypos):
+        if not isinstance(hypos, str):
+            raise ValueError('Input should be a string')
+        return cls(hypos)
+
+    @classmethod
+    def from_dict_probs(cls, hypos):
+        if not isinstance(hypos, dict):
+            raise ValueError('Input should be a dictionary, values being probability')
+        return cls(hypos)
 
 
     def likelihood(self):
@@ -89,7 +109,7 @@ class Cookie(BayesFrame):
         return self.edvidence[hypo][data]
 
 if __name__ == '__main__':
-    cookie = Cookie(['Bowl 1','Bowl 2'])
+    cookie = Cookie.from_list_eq_prob(['Bowl 1','Bowl 2'])
     cookie.update('vanilla')
     for hypo, posteria in cookie.dist.items():
         print('Hypothesis: {},  Posterial:{}'.format(hypo, posteria))
