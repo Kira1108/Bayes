@@ -1,4 +1,5 @@
 
+
 class Pmf(object):
     '''
         Probability distribution function
@@ -71,7 +72,7 @@ class BayesFrame(Pmf):
         for hypo in self.dist:
             like = self.likelihood(data, hypo)
             self.dist[hypo] = self.dist[hypo] * like
-            self.normalize()
+        self.normalize()
 
         if reset:
             self.dist = orig
@@ -86,3 +87,9 @@ class Cookie(BayesFrame):
 
     def likelihood(self, data, hypo):
         return self.edvidence[hypo][data]
+
+if __name__ == '__main__':
+    cookie = Cookie(['Bowl 1','Bowl 2'])
+    cookie.update('vanilla')
+    for hypo, posteria in cookie.dist.items():
+        print('Hypothesis: {},  Posterial:{}'.format(hypo, posteria))
