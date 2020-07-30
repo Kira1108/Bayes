@@ -1,7 +1,6 @@
 # Simulate posterial distribution
 # With out any statistics knowledge
 
-
 import numpy as np
 import pandas as pd
 from collections import Counter
